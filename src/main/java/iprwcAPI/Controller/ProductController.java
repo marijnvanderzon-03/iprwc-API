@@ -1,30 +1,38 @@
 package iprwcAPI.Controller;
 
+
 import iprwcAPI.DAO.ProductDao;
 import iprwcAPI.HTTPResponse;
-import iprwcAPI.RequestObjects.ProductRequestObject;
+import iprwcAPI.Models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 public class ProductController {
-
     @Autowired
-    private ProductDao productDao;
-
-
-    @GetMapping("/product")
-    public HTTPResponse getProduct(@RequestParam(name = "product", defaultValue = "")String product){
-        if (product.equals("")){
-            return HTTPResponse.returnFailure("noProduct was given");
-        } else {
-            return productDao.getProductByName(product);
-        }
-    }
+    ProductDao dao;
 
     @PostMapping("/product")
-    public HTTPResponse saveProduct(@RequestBody ProductRequestObject product){
-        return productDao.addProduct(product.getProduct(), product.getPrice(), product.getImage(), product.getQuantity());
+    public HTTPResponse createProduct(@RequestBody Product product){
+        return dao.AddProduct(product);
+    }
 
+    @GetMapping("/product")
+    public HTTPResponse getAllProducts(){
+        return dao.getAllProducts();
+    }
+
+    @PutMapping("/product")
+    public HTTPResponse changeProduct(@RequestBody Product[] products) {
+        if (products.length == 2) {
+            return dao.changeProduct(products);
+        }
+        return HTTPResponse.returnFailure("input length is not 2");
+    }
+
+    @DeleteMapping("/product")
+    public  HTTPResponse deleteProduct(@RequestBody Product product){
+        return dao.deleteProduct(product);
     }
 }

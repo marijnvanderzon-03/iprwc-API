@@ -3,6 +3,8 @@ package iprwcAPI.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import iprwcAPI.DAO.AccountDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,9 @@ import java.util.function.Function;
 // source: https://www.javainuse.com/spring/boot-jwt
 @Component
 public class JwtTokenUtil {
+
+    @Autowired
+    AccountDao accDao;
     private static final long serialVersionUID = -2550185165626007488L;
 
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
@@ -37,7 +42,7 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    //for retrieveing any information from token we will need the secret key
+    //for retrieving any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
@@ -51,6 +56,8 @@ public class JwtTokenUtil {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        String role = accDao.getRoleByEmail(userDetails.getUsername());
+        claims.put("role", role);
         return doGenerateToken(claims, userDetails.getUsername());
     }
 

@@ -1,4 +1,4 @@
-package iprwcAPI.exception;
+package iprwcAPI.pictureManager;
 
 public class FileStorageException extends RuntimeException {
     public FileStorageException(String message) {

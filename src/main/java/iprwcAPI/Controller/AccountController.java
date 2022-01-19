@@ -2,10 +2,16 @@ package iprwcAPI.Controller;
 
 import iprwcAPI.DAO.AccountDao;
 import iprwcAPI.HTTPResponse;
+import iprwcAPI.Models.Account;
 import iprwcAPI.RequestObjects.AccountRequestObject;
+import iprwcAPI.RequestObjects.AccountReturnObject;
+import iprwcAPI.RequestObjects.RoleUserRequestObject;
 import iprwcAPI.jwt.JwtRequest;
+import iprwcAPI.jwt.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class AccountController {
@@ -19,26 +25,48 @@ public class AccountController {
      * @return success or failure
      */
     @PostMapping("/authenticate")
-    public HTTPResponse createAuthToken(@RequestBody JwtRequest authenticationRequest) {
+    public HTTPResponse<UserResponse> createAuthToken(@RequestBody JwtRequest authenticationRequest) {
         return accountDao.authenticate(authenticationRequest);
     }
 
     /**
      * creates a new account
      */
-    @PostMapping("/register")
-    public HTTPResponse registerAccount(@RequestBody AccountRequestObject o) {
-        return accountDao.registerAccount(o.getUsername() ,o.getPassword());
+
+    @PostMapping("/role")
+    public String getRole(@RequestBody String email){
+        return accountDao.getRoleByEmail(email);
     }
 
+    @PostMapping("/register")
+    public HTTPResponse<AccountReturnObject> registerAccount(@RequestBody AccountRequestObject o) {
+        return accountDao.registerAccount(o.getFirstName(), o.getLastName(), o.getEmail(), o.getPassword());
+    }
+
+
     @GetMapping("/account")
-    public HTTPResponse getAccountDetails(@RequestParam(name="id", defaultValue="") String id, @RequestParam(name="username", defaultValue = "") String username) {
+    public HTTPResponse<AccountReturnObject> getAccountDetails(@RequestParam(name="id", defaultValue="") String id, @RequestParam(name="email", defaultValue = "") String email) {
         // todo make sure top check if this is the account thats logged in!!!
         if (id.equals(""))
-            return accountDao.getIdBelongingToUsername(username);
+            return accountDao.getIdBelongingToEmail(email);
         return accountDao.getAccountDetails(id);
     }
 
+    @PutMapping("/account/mod")
+    public HTTPResponse<Account[]> changeAccount(@RequestBody Account[] accounts) {
+        if (accounts.length == 2) {
+            return accountDao.changeAccount(accounts);
+        }
+        return HTTPResponse.<AccountReturnObject>returnFailure("input length is not 2");
+    }
 
+
+
+    @PostMapping("/account/mod")
+    public HTTPResponse<AccountReturnObject> createMod(@RequestBody AccountRequestObject acc){
+        return accountDao.createMod(acc);
+    }
 }
+
+
 

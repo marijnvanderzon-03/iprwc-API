@@ -1,7 +1,7 @@
 package iprwcAPI.services;
 
 import iprwcAPI.HTTPResponse;
-import iprwcAPI.Model.Account;
+import iprwcAPI.Models.Account;
 import iprwcAPI.Repository.AccountRepository;
 
 import java.util.Optional;

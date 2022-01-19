@@ -1,10 +1,14 @@
 package iprwcAPI.Repository;
 
-import iprwcAPI.Model.Product;
+import iprwcAPI.Models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, String>{
+public interface ProductRepository extends JpaRepository<Product, String> {
+
     Optional<Product> findById(String id);
-    Optional<Product> findByProduct(String product);
+
+    void deleteById(String id);
 }

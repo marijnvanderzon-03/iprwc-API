@@ -28,15 +28,24 @@ import java.util.Arrays;
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // define urls that dont need jwt token
+    // define urls that don't need jwt token
     public static final String[] UNSECURED_URLS = {
             "/authenticate",
             "/register",
             "/account",
             "/uploadFile",
             "/downloadFile/**",
-            "/uploadMultipleFiles",
             "/product",
+            "/downloadFile",
+            "/uploadFile/**",
+            "/product/**",
+            "/order",
+            "/orderId",
+            "/role/save",
+            "/role/addtouser",
+            "/role/removefromuser",
+            "/account/mod",
+            "/role"
     };
 
     @Autowired
