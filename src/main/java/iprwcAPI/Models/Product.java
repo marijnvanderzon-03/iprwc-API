@@ -23,28 +23,18 @@ public class Product {
     @Column(name = "price")
     private int price;
 
-    @Column(name = "amountInCart")
-    private int amountInCart;
 
 
     public Product(){}
 
-    public Product(String image, String product, int quantity, int price, int amountInCart) {
+    public Product(String image, String product, int quantity, int price) {
         this.image = image;
         this.product = product;
         this.quantity = quantity;
         this.price = price;
-        this.amountInCart = amountInCart;
         this.id = UUID.randomUUID().toString();
     }
 
-    public int getAmountInCart() {
-        return amountInCart;
-    }
-
-    public void setAmountInCart(int amountInCart) {
-        this.amountInCart = amountInCart;
-    }
 
     public String getId() {
         return id;

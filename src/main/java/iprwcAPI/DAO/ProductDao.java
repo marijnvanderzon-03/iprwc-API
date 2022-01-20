@@ -15,7 +15,7 @@ public class ProductDao {
     ProductRepository productRep;
 
     public HTTPResponse<Product>AddProduct(Product givenProduct){
-        Product product = new Product("", "", 1, -1, 1);
+        Product product = new Product("", "", 1, -1);
         product.setProduct(givenProduct.getProduct());
         product.setPrice(givenProduct.getPrice());
         product.setImage(givenProduct.getImage());
